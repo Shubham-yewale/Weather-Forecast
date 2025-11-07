@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Weather Precautions</title>
+</head>
+<body>
+  <h1>Weather Precautions</h1>
+  
+  <label for="location">Enter Location: </label>
+  <input type="text" id="location" placeholder="Enter a city">
+  <button onclick="getWeatherPrecautions()">Get Precautions</button>
+  
+  <div id="precautions"></div>
+  
+  <script>
+    async function getWeatherPrecautions() {
+      const location = document.getElementById("location").value;
+      
+      // Replace with your weather API endpoint and API key
+      const apiKey = "YE6NNDUAEP77BFE6BQFUZ9JPD";
+      const apiUrl = `https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/${city}?unitGroup=metric?&key=YE6NNDUAEP77BFE6BQFUZ9JPD`;
+      
+      try {
+        const response = await fetch(apiUrl);
+        const data = await response.json();
+        
+        const precautionsElement = document.getElementById("precautions");
+        
+        if (data.weather && data.weather.length > 0) {
+          const weatherMain = data.weather[0].main;
+          let precautions = "";
+          
+          switch (weatherMain) {
+            case "Rain":
+              precautions = "Carry an umbrella and wear waterproof clothing.";
+              break;
+            case "Snow":
+              precautions = "Dress warmly and drive cautiously.";
+              break;
+            case "Thunderstorm":
+              precautions = "Stay indoors and avoid outdoor activities.";
+              break;
+            default:
+              precautions = "No specific precautions.";
+              break;
+          }
+          
+          precautionsElement.innerHTML = `<p>Precautions: ${precautions}</p>`;
+        } else {
+          precautionsElement.innerHTML = "<p>Weather data not available for the provided location.</p>";
+        }
+      } catch (error) {
+        console.error("Error fetching weather data:", error);
+        const precautionsElement = document.getElementById("precautions");
+        precautionsElement.innerHTML = "<p>Error fetching weather data. Please try again.</p>";
+      }
+    }
+  </script>
+</body>
+</html>
+
